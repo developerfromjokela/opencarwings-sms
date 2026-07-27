@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  */
 public class Modem implements AutoCloseable {
 
-    private static final char CTRL_Z = '\u001a';
+    private static final char CTRL_Z = 0x1a;
 
     private static final Pattern OK = Pattern.compile("\\r\\nOK\\r\\n");
     private static final Pattern ERROR = Pattern.compile("\\r\\nERROR\\r\\n");
@@ -173,7 +173,8 @@ public class Modem implements AutoCloseable {
                 throw new ModemException("Modem rejected AT+CMGS=" + length + ": " + promptBuffer.trim(), promptBuffer.trim());
             }
 
-            // Write the PDU followed by Ctrl-Z, then wait for +CMGS:/OK or an error.
+            // Write the PDU followed by enter, Ctrl-Z, then wait for +CMGS:/OK or an error.
+            clean += "\r";
             write(clean + CTRL_Z);
             String buffer = readUntil(Modem::hasCmgsResult, cmgsTimeoutMs);
 

@@ -45,3 +45,31 @@ Flags can also be supplied via environment variables instead:
 The CLI process blocks (waiting on incoming WebSocket messages) until you
 send SIGINT/SIGTERM (Ctrl-C), at which point it closes the socket and the
 serial port cleanly.
+
+## Run with systemd
+
+```
+[Unit]
+Description=SMS Gateway for OpenCARWINGS              
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=dfj      
+WorkingDirectory=/path/to/ocwsms
+ExecStart=java -jar /path/to/ocwsms/opencarwings-sms.jar --nogui
+Environment="SERIAL_PORT=/dev/ttyUSB0"
+Environment="BAUD_RATE=115200"
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+KillSignal=SIGTERM
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
