@@ -10,6 +10,7 @@ public class ConnectionConfig {
     public boolean autoReconnect = true;
     public int reconnectDelayMs = 5000;
     public int maxReconnectDelayMs = 60000;
+    public boolean pduSpaceCommand = false; // Send space key after PDU and then ctrl+z
 
     public int pingIntervalSeconds = 30;
 
@@ -24,6 +25,7 @@ public class ConnectionConfig {
         c.reconnectDelayMs = this.reconnectDelayMs;
         c.maxReconnectDelayMs = this.maxReconnectDelayMs;
         c.pingIntervalSeconds = this.pingIntervalSeconds;
+        c.pduSpaceCommand = this.pduSpaceCommand;
         return c;
     }
 }

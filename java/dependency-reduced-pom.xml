@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.developerfromjokela.opencarwings.sms</groupId>
   <artifactId>opencarwings-sms-java</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <build>
     <finalName>opencarwings-sms</finalName>
     <plugins>

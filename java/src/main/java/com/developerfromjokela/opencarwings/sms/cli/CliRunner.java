@@ -26,12 +26,13 @@ public final class CliRunner {
         System.out.println("[cli] cmgs timeout    = " + config.cmgsTimeoutMs + " ms");
         System.out.println("[cli] ws url          = " + config.wsUrl);
         System.out.println("[cli] auto-reconnect  = " + config.autoReconnect);
+        System.out.println("[cli] pdu space       = " + config.pduSpaceCommand);
         System.out.println("[cli] reconnect delay = " + config.reconnectDelayMs + " ms (cap " + config.maxReconnectDelayMs + " ms)");
         System.out.println("[cli] ping interval   = " + config.pingIntervalSeconds + " s");
 
         Modem modem;
         try {
-            modem = new Modem(config.serialPort, config.baudRate, config.commandTimeoutMs, config.cmgsTimeoutMs);
+            modem = new Modem(config.serialPort, config.baudRate, config.commandTimeoutMs, config.cmgsTimeoutMs, config.pduSpaceCommand);
         } catch (Exception e) {
             System.err.println("[cli] failed to open modem on " + config.serialPort + ": " + e.getMessage());
             System.exit(1);
@@ -112,6 +113,9 @@ public final class CliRunner {
                     break;
                 case "--no-reconnect":
                     c.autoReconnect = false;
+                    break;
+                case "--pdu-space":
+                    c.pduSpaceCommand = true;
                     break;
                 case "--reconnect-delay":
                     c.reconnectDelayMs = Integer.parseInt(args[++i]);

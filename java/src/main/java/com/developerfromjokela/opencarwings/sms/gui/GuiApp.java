@@ -30,6 +30,7 @@ public class GuiApp extends JFrame {
     private final JSpinner reconnectDelaySpinner = new JSpinner(new SpinnerNumberModel(5000, 500, 120_000, 500));
     private final JSpinner maxReconnectDelaySpinner = new JSpinner(new SpinnerNumberModel(60000, 1000, 600_000, 1000));
     private final JCheckBox autoConnectOnLaunchCheckbox = new JCheckBox("Autoconnect on launch");
+    private final JCheckBox pduSpaceCommandCheckbox = new JCheckBox("PDU Space Command before send");
     private final JButton refreshPortsButton = new JButton("Refresh");
     private final JButton connectButton = new JButton("Connect");
     private final JButton disconnectButton = new JButton("Disconnect");
@@ -115,6 +116,9 @@ public class GuiApp extends JFrame {
         gbc.gridx = 1; gbc.gridy = row; gbc.gridwidth = 2; form.add(autoConnectOnLaunchCheckbox, gbc);
         row++;
 
+        gbc.gridx = 1; gbc.gridy = row; gbc.gridwidth = 2; form.add(pduSpaceCommandCheckbox, gbc);
+        row++;
+
         JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonRow.add(connectButton);
         buttonRow.add(disconnectButton);
@@ -158,6 +162,7 @@ public class GuiApp extends JFrame {
         cmgsTimeoutSpinner.setValue(PREFS.getInt("cmgsTimeoutMs", 20000));
         wsUrlField.setText(PREFS.get("wsUrl", "wss://opencarwings.viaaq.eu/ws/smsgateway/"));
         autoReconnectCheckbox.setSelected(PREFS.getBoolean("autoReconnect", true));
+        pduSpaceCommandCheckbox.setSelected(PREFS.getBoolean("pduSpaceCommand", false));
         pingIntervalSpinner.setValue(PREFS.getInt("pingIntervalSeconds", 30));
         reconnectDelaySpinner.setValue(PREFS.getInt("reconnectDelayMs", 5000));
         maxReconnectDelaySpinner.setValue(PREFS.getInt("maxReconnectDelayMs", 60000));
@@ -177,6 +182,7 @@ public class GuiApp extends JFrame {
         PREFS.putInt("reconnectDelayMs", config.reconnectDelayMs);
         PREFS.putInt("maxReconnectDelayMs", config.maxReconnectDelayMs);
         PREFS.putBoolean("autoConnectOnLaunch", autoConnectOnLaunchCheckbox.isSelected());
+        PREFS.putBoolean("pduSpaceCommand", pduSpaceCommandCheckbox.isSelected());
     }
 
     private ConnectionConfig readConfigFromForm() {
@@ -188,6 +194,7 @@ public class GuiApp extends JFrame {
         config.cmgsTimeoutMs = (Integer) cmgsTimeoutSpinner.getValue();
         config.wsUrl = wsUrlField.getText().trim();
         config.autoReconnect = autoReconnectCheckbox.isSelected();
+        config.pduSpaceCommand = pduSpaceCommandCheckbox.isSelected();
         return config;
     }
 
@@ -222,7 +229,7 @@ public class GuiApp extends JFrame {
             @Override
             protected Void doInBackground() {
                 try {
-                    modem = new Modem(config.serialPort, config.baudRate, config.commandTimeoutMs, config.cmgsTimeoutMs);
+                    modem = new Modem(config.serialPort, config.baudRate, config.commandTimeoutMs, config.cmgsTimeoutMs, config.pduSpaceCommand);
                     log("[gui] modem opened on " + config.serialPort);
 
                     wsClient = new SmsWebSocketClient(

@@ -36,11 +36,13 @@ public class Modem implements AutoCloseable {
     private final OutputStream out;
     private final int commandTimeoutMs;
     private final int cmgsTimeoutMs;
+    private final boolean pduSpaceCommand;
     private final Object lock = new Object();
 
-    public Modem(String portDescriptor, int baudRate, int commandTimeoutMs, int cmgsTimeoutMs) throws ModemException {
+    public Modem(String portDescriptor, int baudRate, int commandTimeoutMs, int cmgsTimeoutMs, boolean pduSpaceCommand) throws ModemException {
         this.commandTimeoutMs = commandTimeoutMs;
         this.cmgsTimeoutMs = cmgsTimeoutMs;
+        this.pduSpaceCommand = pduSpaceCommand;
 
         this.serialPort = SerialPort.getCommPort(portDescriptor);
         this.serialPort.setComPortParameters(baudRate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
@@ -174,7 +176,8 @@ public class Modem implements AutoCloseable {
             }
 
             // Write the PDU followed by enter, Ctrl-Z, then wait for +CMGS:/OK or an error.
-            clean += "\r";
+            if (pduSpaceCommand)
+                clean += "\r";
             write(clean + CTRL_Z);
             String buffer = readUntil(Modem::hasCmgsResult, cmgsTimeoutMs);
 
