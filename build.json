@@ -1,0 +1,9 @@
+{
+  "build_from": {
+    "amd64": "alpine:3.20",
+    "aarch64": "alpine:3.20",
+    "armhf": "alpine:3.20",
+    "armv7": "alpine:3.20",
+    "i386": "alpine:3.20"
+  }
+}

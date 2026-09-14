@@ -1,0 +1,24 @@
+name: "OpenCARWINGS SMS Gateway"
+version: "1.0.0"
+slug: "opencarwings_sms"
+description: "Home Assistant add-on for USB modem serial communication"
+url: "https://github.com/developerfromjokela/opencarwings-sms"
+startup: "application"
+boot: "auto"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+options:
+  device: "/dev/ttyUSB0"
+  baud: 115200
+schema:
+  device: str
+  baud: int(9600,921600)
+devices:
+  - "/dev/ttyUSB+:rwm"
+  - "/dev/ttyACM+:rwm"
+map:
+  - config:rw

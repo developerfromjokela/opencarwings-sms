@@ -216,7 +216,7 @@ public class Modem implements AutoCloseable {
             write(text + CTRL_Z);
             String buffer = readUntil(Modem::hasCmgsResult, cmgsTimeoutMs);
 
-            if (!buffer.contains("\r\nOK\r\n") || !buffer.contains("+CMGS:")) {
+            if (!buffer.contains("OK") || !buffer.contains("+CMGS:")) {
                 throw new ModemException("Modem error sending text message: " + buffer.trim(), buffer.trim());
             }
 
