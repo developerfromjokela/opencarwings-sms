@@ -8,5 +8,5 @@ echo "Starting OpenCarwings Java SMS service on port: ${SERIAL_PORT} with baud r
 
 exec java -Djava.util.prefs.user_root=/data/java_prefs \
           -jar /app/app.jar --nogui \
-          --serial-port "${SERIAL_PORT}" \
-          --baud-rate "${BAUD_RATE}"
+          --port "${SERIAL_PORT}" \
+          --baud "${BAUD_RATE}"
